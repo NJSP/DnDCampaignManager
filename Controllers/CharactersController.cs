@@ -27,12 +27,24 @@ public class CharactersController : Controller
     {
         if (ModelState.IsValid)
         {
+            if (character.CampaignId == 0)
+            {
+                ModelState.AddModelError("CampaignId", "CampaignId is required.");
+                return View(character);
+            }
+
             _context.Characters.Add(character);
             _context.SaveChanges();
-            return RedirectToAction("Index", new { campaignId = character.CampaignId });
+            return RedirectToAction("Index", new { Id = character.CampaignId });
         }
         var campaigns = _context.Campaigns.ToList();
-        ViewBag.Campaigns = new SelectList(campaigns, "Id", "Title");
+        ViewBag.Campaigns = _context.Campaigns
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Title
+            })
+            .ToList();
         var characters = _context.Characters.ToList(); // Fetch characters from the database
         return View("Index", characters);
     }
