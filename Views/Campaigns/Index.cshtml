@@ -1,0 +1,25 @@
+﻿@model CampaignsIndexViewModel
+
+<h1>Campaigns</h1>
+
+<form asp-action="Create" method="post">
+    <input asp-for="NewCampaign.Title" placeholder="Title" required />
+    <textarea asp-for="NewCampaign.Description" placeholder="Description"></textarea>
+    <button type="submit">Add Campaign</button>
+</form>
+
+<ul>
+    @foreach (var campaign in Model.Campaigns)
+    {
+        <li>
+            <strong>Title:</strong> @campaign.Title <br />
+            <strong>Description:</strong> @campaign.Description <br />
+            <strong>Created Date:</strong> @campaign.CreatedDate.ToShortDateString() <br />
+            <strong>Characters:</strong> @campaign.CharactersCount <br />
+        </li>
+    }
+</ul>
+
+@{
+    int campaignId = ViewBag.CampaignId ?? 0; // Ensure a default value is used if ViewBag.CampaignId is null
+}
